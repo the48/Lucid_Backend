@@ -18,6 +18,10 @@ async def get_current_user1(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db: Session = Depends(get_db)
 ) -> User:
+    """
+    Async method that is used to determine the currently logged in user,
+    as well as a means to retrieve the JWT for restricted endpoints * 
+    """
     credentials_exception = HTTPException(
         status_code = status.HTTP_401_UNAUTHORIZED,
         detail = "Could not validate credentials",
@@ -45,7 +49,10 @@ async def get_current_user(
         detail = "Could not validate credentials",
         headers = {"WWW-Authenticate": "Bearer"},
     )
-    
+    """
+    DEPRECATED: previous method used for authentication
+    """
+
     if not authorization:
         raise credentials_exception
     
@@ -69,6 +76,9 @@ async def get_current_user(
 async def verify_token_dependency(
     authorization: Optional[str] = Header(None)
 ) -> str:
+    """
+    Checks for the correct format of the JWT token in the authentication header
+    """
     if not authorization:
         raise HTTPException(
             status_code = status.HTTP_401_UNAUTHORIZED,

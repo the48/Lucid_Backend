@@ -69,7 +69,7 @@ async def http_exception_handler(request: Request, exc: HTTPException):
 async def general_exception_handler(request: Request, exc: Exception):
     logger.error(f"Unhandled exception: {exc}")
     return JSONResponse(
-        status_code=500,
+        status_code = 500,
         content={
             "error": "Internal server error",
             "status_code": 500,
@@ -79,6 +79,9 @@ async def general_exception_handler(request: Request, exc: Exception):
 
 @app.get("/")
 async def root():
+    """
+    General Information
+    """
     return {
         "message": "Lucid Technologies Backend Developer Technical Assessment",
         "version": "1.0.48",

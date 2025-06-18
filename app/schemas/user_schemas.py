@@ -14,6 +14,9 @@ class UserSignup(BaseModel):
     
     @validator('password')
     def validate_password(cls, v):
+        """
+        RegEx patterns that enforce the password policy
+        """
         if not re.search(r"[A-Z]", v):
             raise ValueError('Password must contain at least one uppercase letter')
         if not re.search(r"[a-z]", v):

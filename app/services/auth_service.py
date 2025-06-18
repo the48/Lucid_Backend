@@ -20,10 +20,16 @@ class AuthService:
     
     @staticmethod
     def get_password_hash(password: str) -> str:
+        """
+        Returns a hash of the input string, which will be stored in the DB    
+        """
         return pwd_context.hash(password)
     
     @staticmethod
     def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
+        """
+        Returns the JWT token
+        """
         to_encode = data.copy()
         if expires_delta:
             expire = datetime.utcnow() + expires_delta
@@ -36,6 +42,9 @@ class AuthService:
     
     @staticmethod
     def verify_token(token: str) -> Optional[str]:
+        """
+        JWT token verification using the secret key
+        """
         try:
             payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
             email: str = payload.get("sub")

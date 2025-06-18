@@ -22,6 +22,9 @@ async def signup(
     request: Request,
     db: Session = Depends(get_db)
 ):
+    """
+    Async method that creates a user on the DB. Validations are made to ensure the email is not in use
+    """
     try:
         PayloadValidator.validate_payload_size(await request.body(), max_size_mb = 1.0)
         
@@ -47,6 +50,9 @@ async def login(
     login_data: UserLogin,
     db: Session = Depends(get_db)
 ):
+    """
+    Async method that allows for valid users to login, and returns a JWT token to access other endpoints
+    """
     try:
         user = UserService.authenticate_user(db, login_data.email, login_data.password)
         if not user:
@@ -78,6 +84,9 @@ async def add_post(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user1)
 ):
+    """
+    Async method that allows an authenticated user to add a new post, which is inserted into the DB
+    """
     try:
         PayloadValidator.validate_payload_size(await request.body(), max_size_mb=1.0)
 
@@ -102,6 +111,9 @@ async def get_posts(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user1)
 ):
+    """
+    Async method that retrieves all posts made by the currently logged in user
+    """
     try:
         posts = UserService.get_user_posts(db, current_user.id)
         
@@ -133,6 +145,9 @@ async def delete_post(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user1)
 ):
+    """
+    Async method that allows the authenticated user to delete a given post if and only if created by the same user
+    """
     try:
         PayloadValidator.validate_payload_size(await request.body(), max_size_mb=1.0)
         
